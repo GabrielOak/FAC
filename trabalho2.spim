@@ -1,0 +1,110 @@
+.data
+        str_incorreta: .asciiz "entrada incorreta"
+        str_bit_par: .asciiz "bit-paridade: 0"
+        str_bit_impar: .asciiz "bit-paridade: 1"
+        str_saida: .asciiz "saida: "
+        br: .asciiz "\n"
+.text
+
+main:
+	# Bloco que lê o número inteiro do usuário
+	li $v0, 5 # Comando para ler o número inteiro
+	syscall # Executa o comando para ler o valor
+	move $t0, $v0 # Move o valor lido para o registrador $t0
+	la $t3, ($t0) # Salva o o valor lido em $t3 para se usado depois
+	
+	# Verificando se entrada é menor que 128
+	li $t1, 127
+        slt $t2, $t1, $t0 # Comparando se $t0 é maior que $t1
+        bne $t2, $zero, entrada_incorreta # Comparando se o resultado anterior é diferente de 0
+	
+	
+loop:
+	beqz $t0, end_loop # Quando o $t0 atingir o valor 0 termina a contage bits 1's
+	li $t1, 1 # Carrega 0000...001 
+	and $t2, $t0, $t1   # Faz o AND de $t0 com t1 e coloca em $t2 deixando t0 intacto
+	beq $t2, $t1, soma # Se o bit menos significativo for 1 soma 1
+	srl $t0, $t0, 1 # Deslocamento para direita
+	
+	j loop # Repete o processo até que o valor seja 0
+	
+soma:
+	add $t4, $t4,1 # Som 1 em $t4
+	srl $t0, $t0, 1 # desloca 1 pra direita
+	j loop # Repete o processo 
+	
+end_loop:
+
+	div $t5, $t4, 2 # Divide $t4 por 2 e salva em $t5
+	mfhi $t7 # Pega o resto da divisão
+	bne $t7, $zero, impar # Se a divisão tiver resto o número é impar
+	
+	j par # Se não, é par
+	
+impar:
+
+	la $a0, str_bit_impar # Printa a string de paridade impar
+	li $v0, 4
+	syscall
+	
+	la $a0, br # Printa a string de pular linha
+	li $v0, 4
+	syscall
+	
+	la $a0, str_saida  # Printa a string de saida
+	li $v0, 4
+	syscall
+	
+	add $t6, $t3, 128 # Som o número lido com 128 
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carrega o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando que imprimir o valor da soma
+    	
+    	la $a0, br # Printa a string de pular linha
+	li $v0, 4
+	syscall
+    	
+    	
+    	j retorno # Retorna o valor
+	
+par:
+	
+	la $a0, str_bit_par # Printa a string de paridade par
+	li $v0, 4
+	syscall
+	
+	la $a0, br # Printa a string de pular linha
+	li $v0, 4
+	syscall
+	
+	la $a0, str_saida # Printa a string de saída
+	li $v0, 4
+	syscall
+	
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t3) # Carrega o valor do registrador $t3 no argumento $a0
+    	syscall # Executando o comando que imprimir o valor
+    	
+    	la $a0, br #printa linha
+	li $v0, 4
+	syscall
+	
+    	
+    	j retorno # Retorna o valor
+    	
+entrada_incorreta:
+
+        la $a0, str_incorreta # Printa o valor de string caso o valor seja maior que 128
+        li $v0, 4
+        syscall
+        
+        la $a0, br # Printa string de quebra de linha
+	li $v0, 4
+	syscall
+
+       	j retorno
+	
+retorno:
+	li $v0, 10 # Finaliza o programa
+	syscall
+	

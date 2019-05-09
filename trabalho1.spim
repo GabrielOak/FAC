@@ -1,0 +1,139 @@
+
+.data 
+	str_add:	.asciiz "ADD: "
+	str_sub:	.asciiz "SUB: "
+	str_and:	.asciiz "AND: "
+	str_or:		.asciiz "OR: "
+	str_xor:	.asciiz "XOR: "
+	str_sll:	.asciiz "SLL(3): "
+	str_srl:	.asciiz "SRL(1): "
+	br:		.asciiz "\n"
+
+.text
+main:
+	# Bloco para ler o primeiro valor
+	li $v0, 5 # Comado para ler o valor
+	syscall   # Executando o comando para ler o valor
+	move $t0, $v0 # Movendo o valor lido para o registrador $t0
+	
+	# Bloco para ler o segundo valor
+	li $v0, 5 # Comado para ler o valor
+	syscall   # Executando o comando para ler o valor
+	move $t1, $v0  # Movendo o valor lido para o registrador $t1
+	
+	# Bloco para imprimir a string do add 
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, str_add # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+	# Bloco para imprimir o resultado da soma
+	add $t6, $t0, $t1 # Somando o numeros lidos e salvando temporariamente no registrador $t6
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+    	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+    	
+    	# Bloco para imprimir a string do sub
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, str_sub # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+	# Bloco para imprimir o resultado da sub
+	sub $t6, $t0, $t1 # Subtraindo os valores lidos e salvando temporariamente no registrador $t6
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+    	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+    	
+    	# Bloco para imprimir a string do and
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, str_and # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+	# Bloco para imprimir o resultado do and
+	and $t6, $t0, $t1 # Fazendo and dos valores lidos e salvando temporariamente no registrador $t6
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+    	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+    	#Bloco para imprimir a string do or
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, str_or # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+	# Bloco para imprimir o resultado do or
+	or $t6, $t0, $t1 # Fazendo o or dos valores lidos e salvando temporariamente no registrador $t6
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+    	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+    	
+    	# Bloco para imprimir a string do xor
+	li $v0, 4 # Executando o comando para imprimir o valor
+	la $a0, str_xor # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+	#Imprimindo o resultado do xor
+	xor $t6, $t0, $t1 # Fazendo o xor dos valores lidos e salvando temporariamente no registrador $t6
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+    	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+    	
+    	#Imprimindo a string do SLL
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, str_sll # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+	
+	#Imprimindo o resultado do SLL
+	sll $t6, $t0, 3 # Calculando o deslocamento de 3 bits a esquerda do primeiro valor lido
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+    	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+    	
+    	# Bloco para imprimir a string do SRL
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, str_srl # Carregando a string no argumento $a0  
+	syscall # Executando o comando para imprimir a string 
+	
+	# Bloco para imprimir o resultado do SRL
+	srl $t6, $t1, 1 # Calculando o deslocamento de 1 bit para a direita do segundo valor lido
+	li $v0,1 # Comando para imprimir o valor
+    	la $a0, ($t6) # Carregando o valor do registrador $t6 no argumento $a0
+    	syscall # Executando o comando para imprimir o valor
+    	
+     	# Bloco para imprimir a quebra de linha
+	li $v0, 4 # Comando para imprimir uma string
+	la $a0, br # Carregando a string no argumento $a0 
+	syscall # Executando o comando para imprimir a string
+    
+    
+    	# Finalizando o programa
+    	li $v0,10 # Comando para terminar o programa
+    	syscall # Executando o comando para terminar o programa
